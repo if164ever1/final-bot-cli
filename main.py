@@ -19,11 +19,22 @@ class Name(Field):
 
 
 class Phone(Field):
-    pass
+    def __init__(self, value):
+        if not re.match(r'^\+?\d{10,15}$', value):
+            raise ValueError("Invalid phone number format") + Fore.RED
+        super().__init__(value)
 
 
 class Birthday(Field):
-    pass
+    def __init__(self, value):
+        try:
+            self.value = datetime.strptime(value, "%d.%m.%Y").date()
+        except ValueError:
+            raise ValueError("Invalid date format. Use DD.MM.YYYY") + Fore.RED
+        super().__init__(self.value)
+
+    def __str__(self):
+        return self.value.strftime("%d.%m.%Y")
 
 
 # Клас Record: запис для контакту
@@ -62,6 +73,8 @@ class AddressBook(UserDict):
     def get_upcoming_birthdays(self):
         pass
 
+
+# Для зберігання даних у файл
 
 # serialisation
 
