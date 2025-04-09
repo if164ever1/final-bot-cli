@@ -62,50 +62,30 @@ class Record:
 
 # Клас AddressBook
 class AddressBook(UserDict):
-    def add_record(self, record: Record):
-        self.data[record.name.value] = record
+    pass
 
-    def find(self, name:str):
-        return self.data.get(name)
+    def find(self, name):
+        pass
 
-    def delete(self, name:str):
-        if name in self.data:
-            del self.data[name]
-        else:
-            raise KeyError(f"Contact {name} not found.")
-        
-    def get_upcoming_birthdays(self, days=7):
-        upcoming = []
-        today = datetime.today().date()
+    def delete(self, name):
+        pass
 
-        for record in self.data.values():
-            if record.birthday:
-                next_birthday = record.birthday.value.replace(year=today.year)
-                if next_birthday < today:
-                    next_birthday = next_birthday.replace(year=today.year+1)
-                delta_days = (next_birthday - today).days
-                if delta_days <= days:
-                    upcoming.append(record)
-                    
-        return upcoming
+    def get_upcoming_birthdays(self):
+        pass
+
 
 # Для зберігання даних у файл
 
 # serialisation
 
-def save_data(contacts_book, notes_book, filename="data.bin"):
-    with open(filename, "wb") as file:
-        pickle.dump((contacts_book, notes_book), file)
+def save_data():
+    pass
+
 
 # deserialisation
 
-def load_data(filename="data.bin"):
-    try:
-        with open(filename, "rb") as file:
-            return pickle.load(file)
-    except FileNotFoundError:
-        from notesbook import NotesBook
-        return AddressBook(), NotesBook()
+def load_data():
+    pass
 
 
 # Декоратор для обробки помилок
