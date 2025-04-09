@@ -2,7 +2,7 @@ from collections import UserDict
 from datetime import datetime
 import pickle
 import re
-
+# ---------------------------------винести в окремий файл
 # Класи для управління контактами
 class Field:
     pass
@@ -15,7 +15,8 @@ class Phone(Field):
 
 class Birthday(Field):
     pass
-
+# ------------------------------------
+# -----------------------------------окремий файдл
 class Record:
     def add_phone(self, phone):
         pass
@@ -37,7 +38,8 @@ class Record:
 
     def days_to_birthday(self):
         pass
-
+# -------------------------------------------
+# --------------------------------------------окремий файл
 class AddressBook(UserDict):
     def add_record(self, record):
         pass
@@ -50,6 +52,7 @@ class AddressBook(UserDict):
 
     def get_upcoming_birthdays(self, days=7):
         pass
+ 
 
 # Функції для управління контактами
 def add_contact(args, book: AddressBook):
@@ -72,7 +75,8 @@ def birthdays(args, book: AddressBook):
 
 def edit_contact(args, book: AddressBook):
     pass
-
+# -------------------------------------------------
+# ---------------------------------------------------кремий файл
 # Класи для управління нотатками
 class Note:
     def add_tags(self, tags):
@@ -80,7 +84,8 @@ class Note:
 
     def has_tag(self, tag):
         pass
-
+# -------------------------------------------------
+# ---------------------------------------------------оремий файл
 class NotesBook(UserDict):
     def add_note_with_tags(self, content, tags=None):
         pass
@@ -96,6 +101,7 @@ class NotesBook(UserDict):
 
     def sort_notes_by_tags(self):
         pass
+
 
 # Функції для управління нотатками
 def add_note(args, notes_book: NotesBook):
@@ -118,11 +124,12 @@ def search_notes_by_tag(args, notes_book: NotesBook):
 
 def sort_notes_by_tags(notes_book: NotesBook):
     pass
-
+# ----------------------------------------------------------------окремий файл
 # Функції для інтелектуального аналізу
 def suggest_command(user_input):
     pass
-
+# -----------------------------------------------------------
+# ----------------------------------------------------------окремий файл
 # Серіалізація та десеріалізація
 def save_data(book, filename="addressbook.pkl"):
     pass
@@ -135,16 +142,19 @@ def save_notes(notes_book, filename="notesbook.pkl"):
 
 def load_notes(filename="notesbook.pkl"):
     pass
-
+# -----------------------------------------------------------
+# -----------------------------------------------------------окремий файл
 # Декоратор для обробки помилок
 def input_error(func):
     pass
-
+# -------------------------------------------------------------
+# -------------------------------------------------------------окремий файл
 # Виведення доступних команд
 def show_commands():
     pass
-
-# Основна функція
+# ----------------------------------------------------------------
+# -----------------------------------------------------------------окремий файл
+# Основна функція для запуску програми оставити у файлі main.py
 def main():
     pass
 
