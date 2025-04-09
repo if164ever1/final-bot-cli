@@ -93,14 +93,19 @@ class AddressBook(UserDict):
 
 # serialisation
 
-def save_data():
-    pass
-
+def save_data(contacts_book, notes_book, filename="data.bin"):
+    with open(filename, "wb") as file:
+        pickle.dump((contacts_book, notes_book), file)
 
 # deserialisation
 
-def load_data():
-    pass
+def load_data(filename="data.bin"):
+    try:
+        with open(filename, "rb") as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        from notesbook import NotesBook
+        return AddressBook(), NotesBook()
 
 
 # Декоратор для обробки помилок
