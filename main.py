@@ -62,17 +62,32 @@ class Record:
 
 # Клас AddressBook
 class AddressBook(UserDict):
-    pass
+    def add_record(self, record: Record):
+        self.data[record.name.value] = record
 
-    def find(self, name):
-        pass
+    def find(self, name:str):
+        return self.data.get(name)
 
-    def delete(self, name):
-        pass
+    def delete(self, name:str):
+        if name in self.data:
+            del self.data[name]
+        else:
+            raise KeyError(f"Contact {name} not found.")
+        
+    def get_upcoming_birthdays(self, days=7):
+        upcoming = []
+        today = datetime.today().date()
 
-    def get_upcoming_birthdays(self):
-        pass
-
+        for record in self.data.values():
+            if record.birthday:
+                next_birthday = record.birthday.value.replace(year=today.year)
+                if next_birthday < today:
+                    next_birthday = next_birthday.replace(year=today.year+1)
+                delta_days = (next_birthday - today).days
+                if delta_days <= days:
+                    upcoming.append(record)
+                    
+        return upcoming
 
 # Для зберігання даних у файл
 
