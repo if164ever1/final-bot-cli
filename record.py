@@ -30,3 +30,31 @@ class Record:
     def __str__(self):
         birthday_str = f", birthday: {self.birthday}" if self.birthday else ""
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}{birthday_str}"
+    
+    
+    
+    
+#NEED TO BE DELETED    
+'''
+# Клас Record: запис для контакту
+class Record:
+    pass
+
+    def add_phone(self, phone):
+        pass
+
+    def remove_phone(self, phone):
+        pass
+
+    def edit_phone(self, old_phone, new_phone):
+        pass
+
+    def add_birthday(self, birthday):
+        pass
+
+    def days_to_birthday(self):
+        pass
+
+    def __str__(self):
+        pass
+'''
