@@ -30,7 +30,7 @@ A command-line based personal assistant that helps you manage contacts and notes
 
 ---
 
-## 📁 Project Structure ``` final-bot-cli/ ├── assistant/ # Core logic │ ├── address_book.py │ ├── contact_manager.py │ ├── note.py │ ├── notesbook.py │ ├── record.py │ ├── serialization.py │ └── __init__.py │ ├── cli/ # Command-line interface │ ├── main.py │ └── __init__.py │ ├── data/ # Saved data (pickle) │ └── data.bin │ ├── tests/ # Unit tests │ ├── test_addressbook.py │ ├── test_notes.py │ └── __init__.py │ ├── README.md # Project overview ├── requirements.txt # Dependencies └── .gitignore ```
+<pre> ## 📁 Project Structure ``` final-bot-cli/ ├── assistant/ # Core logic │ ├── address_book.py │ ├── contact_manager.py │ ├── note.py │ ├── notesbook.py │ ├── record.py │ ├── serialization.py │ └── __init__.py │ ├── cli/ # Command-line interface │ ├── main.py │ └── __init__.py │ ├── data/ # Saved data (pickle) │ └── data.bin │ ├── tests/ # Unit tests │ ├── test_addressbook.py │ ├── test_notes.py │ └── __init__.py │ ├── README.md # Project overview ├── requirements.txt # Dependencies └── .gitignore ``` </pre>
 
 ---
 
