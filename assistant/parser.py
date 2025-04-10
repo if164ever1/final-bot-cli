@@ -45,11 +45,11 @@ def execute_command(command, arguments, book, notes_manager):
             for note in sorted_notes:
                 print(note)
 
-if __name__ == "__main__":
-    book = AddressBook()
-    notes_manager = NotesManager()
+# if __name__ == "__main__":
+#     book = AddressBook()
+#     notes_manager = NotesManager()
 
-    while True:
-        user_input = input("Enter command: ")
-        command, arguments = parse_command(user_input)
-        execute_command(command, arguments, book, notes_manager)
+#     while True:
+#         user_input = input("Enter command: ")
+#         command, arguments = parse_command(user_input)
+#         execute_command(command, arguments, book, notes_manager)

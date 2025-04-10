@@ -39,5 +39,5 @@ A command-line based personal assistant that helps you manage contacts and notes
 ```bash
 pip install -r requirements.txt
 
-cd cli
-python main.py
+python -m cli.main
+
