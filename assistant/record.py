@@ -1,4 +1,6 @@
-from fields import Name, Phone, Birthday
+from .fields import Name, Phone, Birthday
+
+
 
 class Record:
     def __init__(self, name):

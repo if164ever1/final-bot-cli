@@ -1,4 +1,5 @@
-from record import Record
+from .record import Record
+
 
 # Парсер команд
 def parse_command(user_input):
