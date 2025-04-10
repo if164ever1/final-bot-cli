@@ -24,9 +24,36 @@ def input_error(func):
 def parse_input():
     pass
 
+def print_help():
+    print(Fore.YELLOW + Style.BRIGHT + "\n💡 Available Commands:\n")
+    print(Fore.CYAN + "📇 Contact Management:")
+    print("  ➕ add contact <name> <phone>")
+    print("  📞 edit phone <name> <old_phone> <new_phone>")
+    print("  🗑️ delete contact <name>")
+    print("  🔍 find contact <keyword>")
+    print("  📋 show contacts\n")
+
+    print(Fore.MAGENTA + "🎂 Birthday Management:")
+    print("  🎁 add birthday <name> <DD.MM.YYYY>")
+    print("  📆 edit birthday <name> <DD.MM.YYYY>")
+    print("  🔮 birthday <days>\n")
+
+    print(Fore.BLUE + "📧 Email & Address:")
+    print("  📧 add/edit email <name> <email>")
+    print("  🏠 add/edit address <name> <address>\n")
+
+    print(Fore.GREEN + "🗒️ Notes:")
+    print("  ✍️ add note <text>")
+    print("  🔍 note find <tag>")
+    print("  🔃 note sort\n")
+
+    print(Fore.RED + "🚪 Exit:")
+    print("  ❌ exit | quit | close\n" + Style.RESET_ALL)
+
+
 def main():
     print(Fore.GREEN + "👋 Welcome to your Personal Assistant CLI!")
-    print("Type 'exit', 'quit' or 'close' to stop.\n")
+    print_help()
     while True:
         user_input = input(Fore.CYAN + ">>> " + Style.RESET_ALL)
         if user_input.lower() in ['exit', 'quit', 'close']:

@@ -22,13 +22,27 @@ class AddressBook(UserDict):
         for record in self.data.values():
             if record.birthday:
                 next_birthday = record.birthday.value.replace(year=today.year)
+
                 if next_birthday < today:
-                    next_birthday = next_birthday.replace(year=today.year+1)
+                    next_birthday = next_birthday.replace(year=today.year + 1)
+
                 delta_days = (next_birthday - today).days
+                print(f"{record.name.value}: birthday on {next_birthday}, in {delta_days} days")
+
                 if delta_days <= days:
                     upcoming.append(record)
-                    
+
         return upcoming
+
+    
+    def search(self, keyword: str):
+        results = []
+        keyword_lower = keyword.lower()
+        for record in self.data.values():
+            if keyword_lower in record.name.value.lower():
+                results.append(record)
+        return results
+
 
 
 

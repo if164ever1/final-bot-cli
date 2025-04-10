@@ -1,12 +1,14 @@
-from .fields import Name, Phone, Birthday
+from .fields import Name, Phone, Birthday, Email, Address
 
 
 
 class Record:
     def __init__(self, name):
-        self.name = Name(name)  
+        self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None
+        self.address = None
     
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -31,10 +33,23 @@ class Record:
     def add_birthday(self, birthday):
         self.birthday = Birthday(birthday)
     
-    def __str__(self):
-        birthday_str = f", birthday: {self.birthday}" if self.birthday else ""
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}{birthday_str}"
+    def add_email(self, email):
+        self.email = Email(email)
     
+    def add_address(self, address):
+        self.address = Address(address)
+    
+    def __str__(self):
+        parts = [f"Contact name: {self.name.value}"]
+        if self.phones:
+            parts.append("phones: " + '; '.join(p.value for p in self.phones))
+        if self.birthday:
+            parts.append(f"birthday: {self.birthday}")
+        if self.email:
+            parts.append(f"email: {self.email}")
+        if self.address:
+            parts.append(f"address: {self.address}")
+        return ", ".join(parts)
     
     
     
