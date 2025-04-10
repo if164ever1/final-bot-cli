@@ -1,0 +1,597 @@
+import pickle
+from collections import UserDict
+from datetime import datetime, date
+import re
+
+
+class Field:
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+
+class Name(Field):
+    def __init__(self, value):
+        if not value.strip():
+            raise ValueError("Name cannot be empty.")
+        super().__init__(value)
+
+
+class Phone(Field):
+    def __init__(self, value):
+        pattern = r'^\d{10}$'  # Номер телефону має бути рівно 10 цифр
+        if not re.match(pattern, value):
+            raise ValueError("Invalid phone number format. Must be 10 digits.")
+        super().__init__(value)
+
+
+class Birthday(Field):
+    def __init__(self, value):
+        try:
+            # Валідація дати у форматі DD.MM.YYYY
+            parsed_date = datetime.strptime(value, "%d.%m.%Y").date()
+        except ValueError:
+            raise ValueError("Invalid date format. Use DD.MM.YYYY.")
+        super().__init__(parsed_date)
+
+    def __str__(self):
+        # Вивід дати у вигляді DD.MM.YYYY
+        return self.value.strftime("%d.%m.%Y")
+# -------------------------------------------------
+
+
+class Record:
+    def __init__(self, name: Name):
+        self.name = name
+        self.phones = []
+        self.email = None
+        self.address = None
+        self.birthday = None
+
+    def add_phone(self, phone: Phone):
+        if phone in self.phones:
+            print(
+                f"Phone {phone.value} already exists for contact {self.name.value}.")
+        else:
+            self.phones.append(phone)
+
+    def remove_phone(self, phone: Phone):
+        self.phones = [p for p in self.phones if p.value != phone.value]
+
+    def edit_phone(self, old_phone: Phone, new_phone: Phone):
+        if old_phone in self.phones:
+            self.remove_phone(old_phone)
+            self.add_phone(new_phone)
+        else:
+            print(
+                f"Phone {old_phone.value} not found for contact {self.name.value}.")
+
+    def add_birthday(self, birthday: Birthday):
+        self.birthday = birthday
+
+    def add_email(self, email: str):
+        pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        if not re.match(pattern, email):
+            raise ValueError("Invalid email format.")
+        self.email = email
+
+    def add_address(self, address: str):
+        self.address = address
+
+    def days_to_birthday(self):
+        if not self.birthday:
+            return None
+        today = datetime.today().date()
+        next_birthday = self.birthday.value.replace(year=today.year)
+        if next_birthday < today:
+            next_birthday = next_birthday.replace(year=today.year + 1)
+        return (next_birthday - today).days
+# --------------------------------------------------
+
+
+class AddressBook(UserDict):
+    def add_record(self, record: Record):
+        """Додає запис до книги."""
+        self.data[record.name.value] = record
+
+    def find(self, name: str):
+        """Шукає контакт за іменем."""
+        if name in self.data:
+            return self.data[name]
+        else:
+            print(f"Contact '{name}' not found.")
+            return None
+
+    def delete(self, name: str):
+        """Видаляє контакт за іменем."""
+        if name in self.data:
+            del self.data[name]
+            print(f"Contact '{name}' deleted successfully.")
+        else:
+            print(f"Contact '{name}' not found.")
+
+    def get_upcoming_birthdays(self, days=7):
+        """Повертає список записів з днями народження протягом заданих днів."""
+        if not self.data:
+            print("AddressBook is empty. No upcoming birthdays.")
+            return []
+
+        upcoming = []
+        today = datetime.today().date()
+        for record in self.data.values():
+            if record.birthday:
+                days_left = record.days_to_birthday()
+                if days_left is not None and days_left <= days:
+                    upcoming.append(record)
+
+        if not upcoming:
+            print(f"No birthdays in the next {days} days.")
+        return upcoming
+# --------------------------------------
+
+
+def add_contact(args, book: AddressBook):
+    try:
+        name = Name(args[0])
+        phone = Phone(args[1]) if len(args) > 1 else None
+        record = Record(name)
+        if phone:
+            record.add_phone(phone)
+        book.add_record(record)
+        return f"Contact '{name.value}' added successfully!"
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def change_phone(args, book: AddressBook):
+    try:
+        name = args[0]
+        old_phone = Phone(args[1])
+        new_phone = Phone(args[2])
+        record = book.find(name)
+        if record:
+            record.edit_phone(old_phone, new_phone)
+            return f"Phone updated for contact '{name}'."
+        else:
+            return f"Contact '{name}' not found."
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def show_phones(args, book: AddressBook):
+    name = args[0]
+    record = book.find(name)
+    if record:
+        phones = ", ".join([phone.value for phone in record.phones])
+        return f"Phones for '{name}': {phones}" if phones else f"No phones found for '{name}'."
+    return f"Contact '{name}' not found."
+# -------------------------------------
+
+
+def show_all(book: AddressBook):
+    if not book.data:
+        return "AddressBook is empty."
+    result = []
+    for name, record in book.items():
+        phones = ", ".join([phone.value for phone in record.phones])
+        result.append(f"{name}: {phones}")
+    return "\n".join(result)
+# -------------------------------------
+
+
+def add_birthday(args, book: AddressBook):
+    try:
+        name = args[0]
+        birthday = Birthday(args[1])
+        record = book.find(name)
+        if record:
+            record.add_birthday(birthday)
+            return f"Birthday added for contact '{name}'."
+        else:
+            return f"Contact '{name}' not found."
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def birthdays(args, book: AddressBook):
+    try:
+        days = int(args[0])
+        upcoming = book.get_upcoming_birthdays(days)
+        if not upcoming:
+            return f"No birthdays in the next {days} days."
+        result = []
+        for record in upcoming:
+            result.append(
+                f"{record.name.value} has a birthday in {record.days_to_birthday()} days.")
+        return "\n".join(result)
+    except ValueError:
+        return "Please provide a valid number of days."
+
+# -------------------------------------
+
+
+def edit_contact(args, book: AddressBook):
+    try:
+        name = args[0]
+        field = args[1]
+        value = args[2]
+        record = book.find(name)
+        if record:
+            if field == "phone":
+                old_phone = Phone(args[2])
+                new_phone = Phone(args[3])
+                record.edit_phone(old_phone, new_phone)
+                return f"Phone updated for contact '{name}'."
+            elif field == "email":
+                record.add_email(value)
+                return f"Email updated for contact '{name}'."
+            elif field == "address":
+                record.add_address(value)
+                return f"Address updated for contact '{name}'."
+            else:
+                return "Unsupported field for editing."
+        else:
+            return f"Contact '{name}' not found."
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+class Note:
+    def __init__(self, content, tags=None):
+        self.content = content
+        self.tags = tags if tags else []
+
+    def add_tags(self, tags):
+        """Додає нові теги до нотатки."""
+        self.tags.extend(tags)
+
+    def has_tag(self, tag):
+        """Перевіряє, чи нотатка має певний тег."""
+        return tag in self.tags
+# - -------------------------------------
+
+
+class NotesBook(UserDict):
+    def add_note_with_tags(self, content, tags=None):
+        """Додає нову нотатку з тегами."""
+        if not content.strip():
+            raise ValueError("Note content cannot be empty.")
+        tags = tags if tags else []
+        note_id = len(self.data) + 1
+        self.data[note_id] = Note(content, tags)
+
+    def delete_note(self, note_id):
+        """Видаляє нотатку за її ID."""
+        if note_id in self.data:
+            del self.data[note_id]
+        else:
+            print(f"Note with ID {note_id} not found.")
+
+    def edit_note(self, note_id, new_content):
+        """Редагує контент нотатки за її ID."""
+        if note_id in self.data:
+            if not new_content.strip():
+                raise ValueError("New content cannot be empty.")
+            self.data[note_id].content = new_content
+        else:
+            print(f"Note with ID {note_id} not found.")
+
+    def search_notes_by_tag(self, tag):
+        """Шукає нотатки за певним тегом."""
+        matches = [note for note in self.data.values() if note.has_tag(tag)]
+        if not matches:
+            print(f"No notes found with tag '{tag}'.")
+        return matches
+
+    def sort_notes_by_tags(self):
+        """Сортує нотатки за кількістю тегів."""
+        return sorted(self.data.values(), key=lambda note: len(note.tags), reverse=True)
+
+# -------------------------------------
+
+
+def add_note(args, notes_book: NotesBook):
+    try:
+        content = args[0]  # Контент нотатки
+        notes_book.add_note_with_tags(content)
+        return "Note added successfully!"
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def delete_note(args, notes_book: NotesBook):
+    try:
+        note_id = int(args[0])
+        notes_book.delete_note(note_id)
+        return f"Note with ID {note_id} deleted successfully."
+    except ValueError:
+        return "Invalid ID format. Please provide a number."
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def edit_note(args, notes_book: NotesBook):
+    try:
+        note_id = int(args[0])
+        new_content = args[1]
+        notes_book.edit_note(note_id, new_content)
+        return f"Note with ID {note_id} updated successfully."
+    except ValueError:
+        return "Invalid ID format. Please provide a number."
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def search_notes(args, notes_book: NotesBook):
+    keyword = args[0]
+    matches = [note for note in notes_book.data.values(
+    ) if keyword.lower() in note.content.lower()]
+    if not matches:
+        return f"No notes found containing '{keyword}'."
+    result = [f"ID: {id} - {note.content}" for id,
+              note in notes_book.data.items() if keyword.lower() in note.content.lower()]
+    return "\n".join(result)
+# -------------------------------------
+
+
+def add_note_with_tags(args, notes_book: NotesBook):
+    try:
+        content = args[0]
+        tags = args[1:]  # Список тегів
+        notes_book.add_note_with_tags(content, tags)
+        return "Note with tags added successfully!"
+    except Exception as e:
+        return f"Error: {e}"
+# -------------------------------------
+
+
+def search_notes_by_tag(args, notes_book: NotesBook):
+    tag = args[0]
+    matches = notes_book.search_notes_by_tag(tag)
+    if not matches:
+        return f"No notes found with tag '{tag}'."
+    result = [
+        f"Note: {note.content}, Tags: {', '.join(note.tags)}" for note in matches]
+    return "\n".join(result)
+# -------------------------------------
+
+
+def sort_notes_by_tags(notes_book: NotesBook):
+    sorted_notes = notes_book.sort_notes_by_tags()
+    if not sorted_notes:
+        return "No notes to sort."
+    result = [
+        f"Note: {note.content}, Tags: {', '.join(note.tags)}" for note in sorted_notes]
+    return "\n".join(result)
+# -------------------------------------
+
+
+def suggest_command(user_input):
+    """Пропонує можливі команди, якщо команда користувача некоректна."""
+    commands = {
+        "add contact": "add contact <name> <phone>",
+        "add note": "add note <content>",
+        "add note with tags": "add note with tags <content> <tags>",
+        "delete contact": "delete contact <name>",
+        "delete note": "delete note <note_id>",
+        "edit contact": "edit contact <name> <field> <new_value>",
+        "edit note": "edit note <note_id> <new_content>",
+        "show all": "show all contacts",
+        "search notes": "search notes <keyword>",
+        "search notes by tag": "search notes by tag <tag>",
+        "birthdays": "birthdays <days>"
+    }
+
+    user_input = user_input.lower()
+    suggestions = [cmd for cmd in commands.keys() if user_input in cmd]
+    if suggestions:
+        return f"Did you mean: {', '.join(suggestions)}?"
+    else:
+        return "Command not recognized. Type 'help' for available commands."
+
+# -------------------------------------
+
+
+def save_data(book, filename="addressbook.pkl"):
+    try:
+        with open(filename, "wb") as file:
+            pickle.dump(book, file)
+        print(f"AddressBook saved successfully to {filename}.")
+    except Exception as e:
+        print(f"Error saving AddressBook: {e}")
+
+# --------------------------------------
+
+
+def load_data(filename="addressbook.pkl"):
+    try:
+        with open(filename, "rb") as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        print(f"{filename} not found. Creating a new AddressBook.")
+        return AddressBook()
+    except EOFError:
+        print(f"{filename} is empty. Creating a new AddressBook.")
+        return AddressBook()
+    except Exception as e:
+        print(f"Error loading AddressBook: {e}")
+        return AddressBook()
+
+# --------------------------------------
+
+
+def save_notes(notes_book, filename="notesbook.pkl"):
+    try:
+        with open(filename, "wb") as file:
+            pickle.dump(notes_book, file)
+        print(f"NotesBook saved successfully to {filename}.")
+    except Exception as e:
+        print(f"Error saving NotesBook: {e}")
+
+
+# --------------------------------------
+
+def load_notes(filename="notesbook.pkl"):
+    try:
+        with open(filename, "rb") as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        print(f"{filename} not found. Creating a new NotesBook.")
+        return NotesBook()
+    except EOFError:
+        print(f"{filename} is empty. Creating a new NotesBook.")
+        return NotesBook()
+    except Exception as e:
+        print(f"Error loading NotesBook: {e}")
+        return NotesBook()
+# --------------------------------------
+
+
+def input_error(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except KeyError:
+            return "Error: Specified key does not exist."
+        except ValueError as e:
+            return f"Error: {e}"
+        except IndexError:
+            return "Error: Missing required arguments."
+        except Exception as e:
+            return f"Unexpected error occurred: {e}"
+    return wrapper
+
+# --------------------------------------
+
+
+@input_error
+def delete_note(args, notes_book: NotesBook):
+    note_id = int(args[0])
+    notes_book.delete_note(note_id)
+    return f"Note with ID {note_id} deleted successfully."
+# -------------------------------------
+
+
+@input_error
+def add_contact(args, book: AddressBook):
+    name = Name(args[0])
+    phone = Phone(args[1]) if len(args) > 1 else None
+    record = Record(name)
+    if phone:
+        record.add_phone(phone)
+    book.add_record(record)
+    return f"Contact '{name.value}' added successfully!"
+# -------------------------------------
+
+
+@input_error
+def delete_contact(args, book: AddressBook):
+    name = args[0]
+    book.delete(name)
+    return f"Contact '{name}' deleted successfully."
+# -------------------------------------
+
+
+def show_commands():
+    """Виводить список доступних команд."""
+    commands = [
+        "add contact <name> <phone> - Додати новий контакт.",
+        "change phone <name> <old_phone> <new_phone> - Змінити номер телефону контакту.",
+        "show phones <name> - Показати всі телефони для контакту.",
+        "show all - Показати всі контакти.",
+        "delete contact <name> - Видалити контакт.",
+        "add birthday <name> <DD.MM.YYYY> - Додати день народження для контакту.",
+        "birthdays <days> - Показати дні народження за кілька днів.",
+        "add note <content> - Додати нову нотатку.",
+        "add note with tags <content> <tags> - Додати нотатку з тегами.",
+        "delete note <note_id> - Видалити нотатку за її ID.",
+        "edit note <note_id> <new_content> - Редагувати текст нотатки.",
+        "search notes <keyword> - Пошук нотаток за ключовими словами.",
+        "search notes by tag <tag> - Пошук нотаток за тегами.",
+        "sort notes - Відсортувати нотатки за кількістю тегів.",
+        "help - Показати список доступних команд.",
+        "exit - Завершити роботу з програмою."
+    ]
+
+    print("Available commands:")
+    for command in commands:
+        print(f" - {command}")
+
+# - -------------------------------------
+
+
+def main():
+    # Завантаження даних
+    address_book = load_data()
+    notes_book = load_notes()
+
+    print("Welcome to the assistant bot!")
+    print("Type 'help' to see available commands.")
+
+    while True:
+        user_input = input("Enter a command: ").strip().lower()
+        if user_input in ["exit", "close"]:
+            # Збереження даних перед виходом
+            save_data(address_book)
+            save_notes(notes_book)
+            print("Goodbye!")
+            break
+
+        command, *args = user_input.split(" ")
+
+        if command == "help":
+            show_commands()
+        elif command == "add":
+            if args[0] == "contact":
+                print(add_contact(args[1:], address_book))
+            elif args[0] == "note":
+                print(add_note(args[1:], notes_book))
+            elif args[0] == "note" and args[1] == "with":
+                print(add_note_with_tags(args[2:], notes_book))
+        elif command == "delete":
+            if args[0] == "contact":
+                print(delete_contact(args[1:], address_book))
+            elif args[0] == "note":
+                print(delete_note(args[1:], notes_book))
+        elif command == "change":
+            if args[0] == "phone":
+                print(change_phone(args[1:], address_book))
+        elif command == "show":
+            if args[0] == "phones":
+                print(show_phones(args[1:], address_book))
+            elif args[0] == "all":
+                print(show_all(address_book))
+        elif command == "add" and args[0] == "birthday":
+            print(add_birthday(args[1:], address_book))
+        elif command == "birthdays":
+            print(birthdays(args, address_book))
+        elif command == "edit":
+            if args[0] == "contact":
+                print(edit_contact(args[1:], address_book))
+            elif args[0] == "note":
+                print(edit_note(args[1:], notes_book))
+        elif command == "search":
+            if args[0] == "notes":
+                print(search_notes(args[1:], notes_book))
+            elif args[0] == "notes" and args[1] == "by":
+                print(search_notes_by_tag(args[2:], notes_book))
+        elif command == "sort" and args[0] == "notes":
+            print(sort_notes_by_tags(notes_book))
+        else:
+            print(suggest_command(user_input))
+
+# - -------------------------------------
+
+
+if __name__ == "__main__":
+    main()
+# Завантаження даних перед запуском програми
