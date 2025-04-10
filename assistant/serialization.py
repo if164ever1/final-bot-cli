@@ -1,56 +1,27 @@
+from colorama import init, Fore
 import pickle
-from colorama import Fore, Style, init
-from assistant.notesbook import NotesBook
-from assistant.address_book import AddressBook
+from collections import UserDict
+from datetime import datetime, timedelta
 
 init(autoreset=True)
 
-# serialisation
-
-
-def save_data(book, filename="addressbook.pkl"):
+def save_data(book, notes_manager, filename="addressbook.pkl"):
     try:
         with open(filename, "wb") as f:
-            pickle.dump(book, f)
-        print(f"{Fore.CYAN}Data saved successfully.{Style.RESET_ALL}")
+            pickle.dump((book, notes_manager), f)
+        print(f"{Fore.GREEN}Data successfully saved to {filename}.")  
     except Exception as e:
-        print(f"{Fore.RED}Error saving data: {e}{Style.RESET_ALL}")
+        print(f"{Fore.RED}Error saving data: {e}") 
 
-
-# deserialisation
-
-def load_data():
-    try:
-        with open("addressbook.pkl", "rb") as f:
-            return pickle.load(f)
-    except (FileNotFoundError, EOFError):
-        print(
-            f"{Fore.YELLOW}No saved data found. Returning a new AddressBook.{Style.RESET_ALL}")
-        return AddressBook()
-    except Exception as e:
-        print(f"{Fore.RED}Error loading data: {e}{Style.RESET_ALL}")
-        return AddressBook()
-
-# serialisation notes
-
-
-def save_notes(notes_book, filename="notes.pkl"):
-    with open(filename, "wb") as f:
-        pickle.dump(notes_book, f)
-    print(f"{Fore.CYAN}Notes saved successfully.{Style.RESET_ALL}")
-
-
-# deserialisation notes
-
-
-def load_notes(filename="notes.pkl"):
+def load_data(filename="addressbook.pkl"):
     try:
         with open(filename, "rb") as f:
-            return pickle.load(f)
-    except (FileNotFoundError, EOFError):
-        print(
-            f"{Fore.YELLOW}No saved notes found. Returning a new NotesBook.{Style.RESET_ALL}")
-        return NotesBook()
+            book, notes_manager = pickle.load(f)
+        print(f"{Fore.GREEN}Data successfully loaded from {filename}.") 
+        return book, notes_manager
+    except FileNotFoundError:
+        print(f"{Fore.YELLOW}File {filename} not found. A new address book will be created.")  
+        return AddressBook(), NotesManager()  
     except Exception as e:
-        print(f"{Fore.RED}Error loading notes: {e}{Style.RESET_ALL}")
-        return NotesBook()
+        print(f"{Fore.RED}Error loading data: {e}")  
+        return AddressBook(), NotesManager()
