@@ -1,3 +1,5 @@
+from record import Record
+
 # Парсер команд
 def parse_command(user_input):
     parts = user_input.strip().split()
