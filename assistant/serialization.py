@@ -2,6 +2,7 @@ from colorama import init, Fore
 import pickle
 from collections import UserDict
 from datetime import datetime, timedelta
+from assistant.address_book import AddressBook
 
 init(autoreset=True)
 
@@ -21,7 +22,7 @@ def load_data(filename="addressbook.pkl"):
         return book, notes_manager
     except FileNotFoundError:
         print(f"{Fore.YELLOW}File {filename} not found. A new address book will be created.")  
-        return AddressBook(), NotesManager()  
+        return AddressBook()
     except Exception as e:
         print(f"{Fore.RED}Error loading data: {e}")  
-        return AddressBook(), NotesManager()
+        return AddressBook()
