@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timedelta
-from main import AddressBook, Record, Name, Birthday  # імпортуй з main.py
+from cli.main import AddressBook, Record, Name, Birthday  # імпортуй з main.py
 
 class TestAddressBook(unittest.TestCase):
     def test_get_upcoming_birthdays(self):

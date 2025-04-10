@@ -1,6 +1,7 @@
 import pickle
 from colorama import Fore, Style, init
-from notesbook import NotesBook
+from assistant.notesbook import NotesBook
+from assistant.address_book import AddressBook
 
 init(autoreset=True)
 

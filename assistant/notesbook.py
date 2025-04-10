@@ -1,5 +1,5 @@
 from collections import UserDict
-from note import Note
+from assistant.note import Note
 
 class NotesBook(UserDict):
     def add_note(self, text, tags=None):

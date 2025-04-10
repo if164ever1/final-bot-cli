@@ -1,6 +1,6 @@
 from collections import UserDict
 from datetime import datetime
-from record import Record
+from assistant.record import Record
 
 class AddressBook(UserDict):
     def add_record(self, record: Record):
