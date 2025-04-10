@@ -29,3 +29,35 @@ class AddressBook(UserDict):
                     upcoming.append(record)
                     
         return upcoming
+
+
+
+# Команди для роботи з адресною книгою
+# @input_error
+# def add_contact(args, book: AddressBook):
+#     pass
+
+
+# @input_error
+# def change_phone(args, book: AddressBook):
+#     pass
+
+
+# @input_error
+# def show_phones(args, book: AddressBook):
+#     pass
+
+
+# @input_error
+# def show_all(book: AddressBook):
+#     pass
+
+
+# @input_error
+# def add_birthday(args, book: AddressBook):
+#     pass
+
+
+# @input_error
+# def birthdays(args, book: AddressBook):
+#     pass
