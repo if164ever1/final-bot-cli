@@ -46,7 +46,7 @@ def print_help():
     print("  ✍️ add note <text>")
     print("  🔍 note find <tag>")
     print("  🔃 note sort")
-    print("  🗑️ delete note <text>\n") # change please check
+    print("  🗑️ note delete <text>\n") # change please check
 
 
     print(Fore.RED + "🚪 Exit:")
