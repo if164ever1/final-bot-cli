@@ -155,7 +155,6 @@ def execute_command(command: str, arguments: list, book, notes_manager):
 
 # -----------------------------------
             if arguments[0] == "delete":
-                print(f"{arguments=}")
                 if len(arguments) < 2:
                     print("❗ Usage: delete note <text>")
                     return
