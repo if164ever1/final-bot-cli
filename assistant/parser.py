@@ -2,7 +2,7 @@ from .record import Record
 
 
 # Парсер команд
-def parse_command(user_input:str):
+def parse_command(user_input: str):
     parts = user_input.strip().split()
     if not parts:
         return "", []
@@ -11,7 +11,9 @@ def parse_command(user_input:str):
     return command, arguments
 
 # Виконання команд
-def execute_command(command:str, arguments:list, book, notes_manager):
+
+
+def execute_command(command: str, arguments: list, book, notes_manager):
     if command == "add":
         if arguments and arguments[0] == "contact":
             if len(arguments) < 3:
@@ -72,7 +74,7 @@ def execute_command(command:str, arguments:list, book, notes_manager):
                 return
             record.add_address(address)
             print(f"📮 Address added for {name}: {address}")
-    
+
     elif command == "delete":
         if arguments and arguments[0] == "contact":
             if len(arguments) < 2:
@@ -84,7 +86,7 @@ def execute_command(command:str, arguments:list, book, notes_manager):
                 print(f"🗑️ Contact '{name}' deleted.")
             except KeyError:
                 print(f"❌ Contact '{name}' not found.")
-    
+
     elif command == "show":
         if arguments and arguments[0] == "contacts":
             if not book.data:
@@ -92,7 +94,7 @@ def execute_command(command:str, arguments:list, book, notes_manager):
                 return
             for record in book.data.values():
                 print(record)
-    
+
     elif command == "birthday":
         try:
             days = int(arguments[0]) if arguments else 7
@@ -108,11 +110,10 @@ def execute_command(command:str, arguments:list, book, notes_manager):
             for record in upcoming:
                 print(f"🎂 {record.name.value} — {record.birthday}")
 
-    
     elif command == "note":
         if len(arguments) < 2:
             print("❗ Usage: 'note find <tag>' or 'note sort'")
-            return       
+            return
         elif command == "add" and arguments and arguments[0] == "note":
             text = ' '.join(arguments[1:])
             notes_manager.add_note(text)
@@ -151,6 +152,19 @@ def execute_command(command:str, arguments:list, book, notes_manager):
                         print(note)
                 else:
                     print("🔍 No matching notes found.")
+
+# -----------------------------------
+            if arguments[0] == "delete":
+                if len(arguments) < 2:
+                    print("❗ Usage: delete note <text>")
+                    return
+                text = ' '.join(arguments[1:])
+                success = notes_manager.delete_note(text)
+                if success:
+                    print(f"🗑️ Note deleted: {text}")
+                else:
+                    print("❌ Note not found.")
+# -----------------------------------
         elif arguments[0] == "sort":
             sorted_notes = notes_manager.sort_notes_by_tag()
             if sorted_notes:
@@ -159,7 +173,7 @@ def execute_command(command:str, arguments:list, book, notes_manager):
                     print(note)
             else:
                 print("ℹ️ No notes to sort.")
-        
+
         # if "find" in arguments:
         #     tag = arguments[2] if len(arguments) > 2 else None
         #     notes = notes_manager.find_notes_by_tag(tag)
@@ -175,7 +189,7 @@ def execute_command(command:str, arguments:list, book, notes_manager):
         #             print(note)
         #     else:
         #         print("ℹ️ No notes to sort.")
-    
+
     elif command == "find":
         if arguments and arguments[0] == "contact":
             if len(arguments) < 2:
@@ -189,7 +203,7 @@ def execute_command(command:str, arguments:list, book, notes_manager):
                     print(r)
             else:
                 print(f"❌ No contacts found with '{keyword}'.")
-    
+
     elif command == "edit":
         if arguments and arguments[0] == "phone":
             if len(arguments) < 4:
@@ -249,3 +263,4 @@ def execute_command(command:str, arguments:list, book, notes_manager):
             except ValueError as e:
                 print(f"❗ Error: {e}")
 
+#
