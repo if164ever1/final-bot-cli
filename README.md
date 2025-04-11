@@ -36,7 +36,7 @@ A command-line based personal assistant that helps you manage contacts and notes
 
 - Python 3.8+
 - Install dependencies:
-    - colorma
+    - colorama
 
 ### Start command
 
