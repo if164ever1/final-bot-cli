@@ -2,6 +2,7 @@ from .record import Record
 
 
 # Парсер команд
+
 def parse_command(user_input: str):
     parts = user_input.strip().split()
     if not parts:
@@ -10,8 +11,8 @@ def parse_command(user_input: str):
     arguments = parts[1:]
     return command, arguments
 
-# Виконання команд
 
+# Виконання команд
 
 def execute_command(command: str, arguments: list, book, notes_manager):
     if command == "add":
@@ -153,7 +154,6 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 else:
                     print("🔍 No matching notes found.")
 
-# -----------------------------------
             if arguments[0] == "delete":
                 if len(arguments) < 2:
                     print("❗ Usage: delete note <text>")
@@ -164,7 +164,7 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                     print(f"🗑️ Note deleted: {text}")
                 else:
                     print("❌ Note not found.")
-# -----------------------------------
+
         elif arguments[0] == "sort":
             sorted_notes = notes_manager.sort_notes_by_tag()
             if sorted_notes:
@@ -173,22 +173,6 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                     print(note)
             else:
                 print("ℹ️ No notes to sort.")
-
-        # if "find" in arguments:
-        #     tag = arguments[2] if len(arguments) > 2 else None
-        #     notes = notes_manager.find_notes_by_tag(tag)
-        #     if notes:
-        #         for note in notes:
-        #             print(note)
-        #     else:
-        #         print(f"🔍 No notes found with tag '{tag}'.")
-        # elif "sort" in arguments:
-        #     sorted_notes = notes_manager.sort_notes_by_tag()
-        #     if sorted_notes:
-        #         for note in sorted_notes:
-        #             print(note)
-        #     else:
-        #         print("ℹ️ No notes to sort.")
 
     elif command == "find":
         if arguments and arguments[0] == "contact":
@@ -262,5 +246,3 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 print(f"🎂 Birthday updated for {name}: {new_birthday}")
             except ValueError as e:
                 print(f"❗ Error: {e}")
-
-#

@@ -11,14 +11,17 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 class Name(Field):
     pass
+
 
 class Phone(Field):
     def __init__(self, value):
         if not re.match(r'^\+?\d{10,15}$', value):
             raise ValueError("Invalid phone number format") + Fore.RED
         super().__init__(value)
+
 
 class Birthday(Field):
     def __init__(self, value):
@@ -31,11 +34,13 @@ class Birthday(Field):
     def __str__(self):
         return self.value.strftime("%d.%m.%Y")
 
+
 class Email(Field):
     def __init__(self, value):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
             raise ValueError("Invalid email format")
         super().__init__(value)
 
+
 class Address(Field):
-    pass 
+    pass

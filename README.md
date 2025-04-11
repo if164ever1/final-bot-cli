@@ -36,10 +36,11 @@ A command-line based personal assistant that helps you manage contacts and notes
 
 - Python 3.8+
 - Install dependencies:
-```bash
-pip install -r requirements.txt
+    - colorma
 
-python -m cli.main
+### Start command
+
+- python -m cli.main
 
 
 
@@ -66,11 +67,11 @@ edit phone John +380991112233 +380999999999
 edit birthday John 01.01.2000
 edit email John new_email@example.com
 edit address John Lviv, Ukraine
-edit address John Lviv, Ukraine
+
 
 UPCOMING BIRTHDAY
 add contact Mike +380931112233
-add birthday Mike <дата через 5 днів>  ← підстави актуальну дату
+add birthday Mike <"date in days">  ← grounds actual date
 birthday 5
 
 NOTES

@@ -1,6 +1,7 @@
 from datetime import datetime
 from collections import UserDict
 
+
 class Note:
     def __init__(self, text, tags=None):
         self.text = text
@@ -8,7 +9,6 @@ class Note:
             self.tags = tags
         else:
             self.tags = text.lower().split()  # ← автоматично з тексту
-
 
     def edit(self, new_text):
         self.text = new_text
