@@ -1,6 +1,7 @@
 from collections import UserDict
 from .note import Note
 
+
 class NotesBook(UserDict):
     def add_note(self, text, tags=None):
         note = Note(text, tags)
@@ -27,6 +28,5 @@ class NotesBook(UserDict):
                 result.append(note)
         return result
 
-    
     def sort_notes_by_tag(self):
         return sorted(self.data.values(), key=lambda note: ', '.join(note.tags))

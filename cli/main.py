@@ -45,7 +45,9 @@ def print_help():
     print(Fore.GREEN + "🗒️ Notes:")
     print("  ✍️ add note <text>")
     print("  🔍 note find <tag>")
-    print("  🔃 note sort\n")
+    print("  🔃 note sort")
+    print("  🗑️ delete note <text>\n") # change please check
+
 
     print(Fore.RED + "🚪 Exit:")
     print("  ❌ exit | quit | close\n" + Style.RESET_ALL)
