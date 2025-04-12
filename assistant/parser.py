@@ -26,6 +26,7 @@ def execute_command(command: str, arguments: list, book, notes_manager):
             record.add_phone(phone)
             book.add_record(record)
             print(f"✅ Contact '{name}' added with phone {phone}")
+
         elif arguments and arguments[0] == "note":
             text = ' '.join(arguments[1:])
             if not text:
@@ -33,6 +34,7 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 return
             notes_manager.add_note(text)
             print(f"📝 Note added: {text}")
+
         elif arguments and arguments[0] == "birthday":
             if len(arguments) < 3:
                 print("❗ Please provide name and birthday in format DD.MM.YYYY.")
@@ -48,6 +50,7 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 print(f"🎂 Birthday added for {name}: {birthday}")
             except ValueError as e:
                 print(f"❗ Error: {e}")
+
         elif arguments and arguments[0] == "email":
             if len(arguments) < 3:
                 print("❗ Please provide name and email.")
@@ -63,6 +66,7 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 print(f"📧 Email added for {name}: {email}")
             except ValueError as e:
                 print(f"❗ Error: {e}")
+
         elif arguments and arguments[0] == "address":
             if len(arguments) < 3:
                 print("❗ Please provide name and address.")
@@ -115,10 +119,12 @@ def execute_command(command: str, arguments: list, book, notes_manager):
         if len(arguments) < 2:
             print("❗ Usage: 'note find <tag>' or 'note sort'")
             return
+
         elif command == "add" and arguments and arguments[0] == "note":
             text = ' '.join(arguments[1:])
             notes_manager.add_note(text)
             print(f"📝 Note added: {text}")
+
         elif command == "edit" and arguments and arguments[0] == "note":
             if len(arguments) < 3:
                 print("❗ Usage: edit note <old_text> <new_text>")
@@ -130,6 +136,7 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 print(f"✏️ Note updated: {new_text}")
             else:
                 print("❌ Note not found.")
+
         elif command == "delete" and arguments and arguments[0] == "note":
             if len(arguments) < 2:
                 print("❗ Usage: delete note <text>")
@@ -140,10 +147,12 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 print(f"🗑️ Note deleted: {text}")
             else:
                 print("❌ Note not found.")
+
         elif command == "note":
             if len(arguments) < 2:
                 print("❗ Usage: note find <tag> or note sort")
                 return
+
             if arguments[0] == "find":
                 tag = arguments[1]
                 notes = notes_manager.find_notes_by_tag(tag)
@@ -165,14 +174,14 @@ def execute_command(command: str, arguments: list, book, notes_manager):
                 else:
                     print("❌ Note not found.")
 
-        elif arguments[0] == "sort":
-            sorted_notes = notes_manager.sort_notes_by_tag()
-            if sorted_notes:
-                print("📑 Sorted notes by tag:")
-                for note in sorted_notes:
-                    print(note)
-            else:
-                print("ℹ️ No notes to sort.")
+            if arguments[0] == "sort":
+                sorted_notes = notes_manager.sort_notes_by_tag()
+                if sorted_notes:
+                    print("📑 Sorted notes by tag:")
+                    for note in sorted_notes:
+                        print(note)
+                else:
+                    print("ℹ️ No notes to sort.")
 
     elif command == "find":
         if arguments and arguments[0] == "contact":
