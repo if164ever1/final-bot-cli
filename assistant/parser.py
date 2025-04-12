@@ -1,8 +1,6 @@
 from .record import Record
 
 
-# Парсер команд
-
 def parse_command(user_input: str):
     parts = user_input.strip().split()
     if not parts:
@@ -11,8 +9,6 @@ def parse_command(user_input: str):
     arguments = parts[1:]
     return command, arguments
 
-
-# Виконання команд
 
 def execute_command(command: str, arguments: list, book, notes_manager):
     if command == "add":

@@ -3,7 +3,6 @@ import re
 from colorama import Fore, Style, init
 
 
-# Клас для базового поля (Field) і його наслідування
 class Field:
     def __init__(self, value):
         self.value = value

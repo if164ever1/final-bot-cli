@@ -23,7 +23,7 @@ class NotesBook(UserDict):
 
     def find_notes_by_tag(self, tag):
         result = []
-        for note in self.data.values():  # ✅ замість self.notes
+        for note in self.data.values():
             if tag.lower() in [t.lower() for t in note.tags]:
                 result.append(note)
         return result

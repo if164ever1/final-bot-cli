@@ -8,7 +8,7 @@ class Note:
         if tags:
             self.tags = tags
         else:
-            self.tags = text.lower().split()  # ← автоматично з тексту
+            self.tags = text.lower().split()
 
     def edit(self, new_text):
         self.text = new_text
