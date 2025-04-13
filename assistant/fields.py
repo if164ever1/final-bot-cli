@@ -18,7 +18,7 @@ class Name(Field):
 class Phone(Field):
     def __init__(self, value):
         if not re.match(r'^\+?\d{10,15}$', value):
-            raise ValueError("Invalid phone number format") + Fore.RED
+            raise ValueError(f"{Fore.RED}Invalid phone number format{Style.RESET_ALL}")
         super().__init__(value)
 
 
