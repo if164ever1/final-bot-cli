@@ -27,7 +27,7 @@ class Birthday(Field):
         try:
             self.value = datetime.strptime(value, "%d.%m.%Y").date()
         except ValueError:
-            raise ValueError("Invalid date format. Use DD.MM.YYYY")
+            raise ValueError(f"{Fore.RED}Invalid date format. Use DD.MM.YYYY{Style.RESET_ALL}")
         super().__init__(self.value)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Birthday(Field):
 class Email(Field):
     def __init__(self, value):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
-            raise ValueError("Invalid email format")
+            raise ValueError(f"{Fore.RED}Invalid email format{Style.RESET_ALL}")
         super().__init__(value)
 
 
