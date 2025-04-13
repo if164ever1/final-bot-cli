@@ -1,4 +1,3 @@
-from colorama import Fore, Style, init
 from assistant.address_book import AddressBook
 from assistant.notesbook import NotesBook
 from assistant.serialization import save_data, load_data

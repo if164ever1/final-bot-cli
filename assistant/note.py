@@ -1,7 +1,3 @@
-from datetime import datetime
-from collections import UserDict
-
-
 class Note:
     def __init__(self, text, tags=None):
         self.text = text
